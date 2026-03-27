@@ -1,47 +1,47 @@
 ﻿--Base de datos a usar:
 USE Northwind;
 
--- 1. Listar todos los productos con nombre.
+-- 1.
 SELECT 
 	ProductName as [Nombre del Producto],
 	UnitPrice	as [Precio unitario],
 	UnitsInStock as Stock
 FROM Products;
 
---2. Mostrar todos los productos que cuestan mas de 20 y tienen un stock mayor a 0.
+--2.
 SELECT 
 	* 
 FROM products
 WHERE UnitPrice > 20
 AND UnitsInStock > 0;
 
---3.Lista los clientes de USA
+--3.
 SELECT 
 	* 
 FROM Customers 
 WHERE Country = 'USA';
 
---4.Ordenar los productos por precio de mayor a menor
+--4.
 SELECT 
 	*
 FROM Products
 ORDER BY UnitPrice DESC;
 
---5.Listar nombre del producto y el nombre de la categoría
+--5.
 SELECT 
 	P.ProductName,
 	C.CategoryName
 FROM Products P
 INNER JOIN Categories C ON C.CategoryID = P.CategoryID;
 
---6.Listar el nombre del cliente y la fecha de la orden. Tablas: Customers, Orders
+--6.
 SELECT 
 	C.CompanyName,
 	O.OrderDate
 FROM Customers C 
 INNER JOIN Orders O ON O.CustomerID = C.CustomerID;
 
---7. Listar el nombre del producto y la cantidad vendida. Tablas: Order details, Products.
+--7.
 SELECT 
 	P.ProductName,
 	SUM(OD.Quantity) as CantidadVendida
@@ -49,7 +49,7 @@ FROM Products P
 INNER JOIN [Order Details] OD on OD.ProductID = P.ProductID
 GROUP BY P.ProductName;
 
---8. Listar el nombre del cliente y el nombre del producto que ha comprado. Tablas: Customers, Orders, Order Details, Products.
+--8.
 SELECT 
 	C.CompanyName,
 	P.ProductName
@@ -60,7 +60,7 @@ INNER JOIN Products P on P.ProductID = OD.ProductID
 GROUP BY ProductName, CompanyName
 ORDER BY CompanyName;
 
---9. Contar cuantos productos hay por categoria
+--9.
 SELECT 
 	C.CategoryName,
 	COUNT(P.ProductID) as [Cantidad de productos]
@@ -68,7 +68,7 @@ FROM Categories C
 INNER JOIN Products P on P.CategoryID = C.CategoryID
 GROUP BY C.CategoryName;
 
---10. Total de órdenes por cliente
+--10.
 SELECT 
 	C.CompanyName as Cliente,
 	COUNT(O.orderID)
@@ -76,7 +76,7 @@ FROM Customers C
 INNER JOIN Orders O on O.CustomerID = C.CustomerID
 GROUP BY C.CompanyName;
 
---11. Calcular el total vendido por producto:
+--11.
 SELECT 
 	P.ProductName,
 	SUM(OD.UnitPrice*Quantity) as Ventas
@@ -84,7 +84,7 @@ FROM Products P
 INNER JOIN [Order Details] OD on OD.ProductID = P.ProductID
 GROUP BY P.ProductName;
 
---12. Calcular el top 5 de clientes que mas compraron
+--12.
 SELECT TOP 5
 	C.CompanyName,
 	SUM(OD.Quantity*OD.UnitPrice)
@@ -94,7 +94,7 @@ INNER JOIN [Order Details] OD on OD.OrderID = O.OrderID
 GROUP BY C.CompanyName
 ORDER BY SUM(OD.Quantity*UnitPrice) DESC;
 
---13. Categorías con mas de 10 productos
+--13.
 SELECT 
 	C.CategoryName as Categoria,
 	COUNT(P.ProductID) as Productos
@@ -103,7 +103,7 @@ INNER JOIN Products P on P.CategoryID = C.CategoryID
 GROUP BY C.CategoryName
 HAVING COUNT(P.ProductID) > 10;
 
---14. Clientes que hicieron mas de 5 pedidos
+--14.
 SELECT 
 	C.CompanyName as Cliente,
 	COUNT(O.OrderID) as Pedidos
@@ -112,14 +112,14 @@ INNER JOIN Customers C on C.CustomerID = O.CustomerID
 GROUP BY C.CompanyName
 HAVING COUNT(O.OrderID) > 5;
 
---15. Productos que nunca se han vendido
+--15.
 SELECT 
 	P.ProductName
 FROM Products P
 LEFT JOIN [Order Details] OD on OD.ProductID = P.ProductID
 WHERE OD.ProductID IS NULL;
 
---16. Top 3 productos mas vendidos por cantidad
+--16.
 SELECT TOP 3 
 	P.ProductName as Producto,
 	SUM(OD.Quantity) as CantidadVendida
@@ -128,7 +128,7 @@ JOIN [Order Details] OD on OD.ProductID = P.ProductID
 GROUP BY P.ProductName
 ORDER BY SUM(OD.Quantity) DESC;
 
---17. Para cada una de las ordenes calcular el total de dinero de la orden
+--17.
 SELECT 
 	O.OrderID,
 	O.OrderDate,
@@ -143,7 +143,7 @@ SELECT
 FROM [Order Details] OD
 GROUP BY OD.orderID;
 
---18. Clientes que han comprado mas de 1000 en total
+--18.
 SELECT 
 	C.CompanyName as Cliente,
 	SUM(OD.Quantity*OD.UnitPrice) as Total
@@ -153,7 +153,7 @@ INNER JOIN [Order Details] OD on O.OrderID = OD.OrderID
 GROUP BY C.CompanyName
 HAVING SUM(OD.Quantity*OD.UnitPrice) > 1000;
 
---19. Mes con mas ventas
+--19.
 SELECT TOP 1
 	YEAR(O.OrderDate) as Año,
 	DATENAME(MONTH, O.OrderDate) as Mes,
@@ -163,7 +163,7 @@ INNER JOIN [Order Details] OD on O.OrderID = OD.OrderID
 GROUP BY YEAR(O.OrderDate),DATENAME(MONTH, O.OrderDate)
 ORDER BY SUM(OD.Quantity*OD.UnitPrice) DESC;
 
---20. Clientes que compraron todos los productos de una categoría
+--20.
 SELECT 
 	C.CompanyName as Cliente,
 	Ct.CategoryName as Categoria,
