@@ -2,10 +2,10 @@
 
 1. Listar todos los productos con nombre.
 2. Mostrar todos los productos que cuestan mas de 20 y tienen un stock mayor a 0.
-3.Lista los clientes de USA
-4.Ordenar los productos por precio de mayor a menor
-5.Listar nombre del producto y el nombre de la categoría
-6.Listar el nombre del cliente y la fecha de la orden. Tablas: Customers, Orders
+3. Lista los clientes de USA
+4. Ordenar los productos por precio de mayor a menor
+5. Listar nombre del producto y el nombre de la categoría
+6. Listar el nombre del cliente y la fecha de la orden. Tablas: Customers, Orders
 7. Listar el nombre del producto y la cantidad vendida. Tablas: Order details, Products.
 8. Listar el nombre del cliente y el nombre del producto que ha comprado. Tablas: Customers, Orders, Order Details, Products.
 9. Contar cuantos productos hay por categoria
