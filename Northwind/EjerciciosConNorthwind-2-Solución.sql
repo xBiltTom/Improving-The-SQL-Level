@@ -75,4 +75,45 @@ GROUP BY s.CompanyName
 ORDER BY PromedioDiasEntrega;
 
 
+--ZONA DE CTE
+--Con un CTE, calcula el ingreso total y el precio promedio por categoría. Luego ordena las categorías por ingreso total descendente.
 
+WITH IngresoCategorias AS (
+	SELECT 
+		c.CategoryName,
+		ROUND(SUM(OD.Quantity*OD.UnitPrice*(1-OD.Discount)),2) as IngresoTotal,
+		ROUND(AVG(P.UnitPrice), 2) as PrecioPromedio
+	FROM Categories C
+	INNER JOIN Products P on P.CategoryID = C.CategoryID
+	INNER JOIN [Order Details] OD on OD.ProductID = P.ProductID
+	GROUP BY C.CategoryName
+)
+SELECT * FROM IngresoCategorias ORDER BY IngresoTotal DESC;
+
+--La tabla Employees tiene la columna ReportsTo. Usa un CTE recursivo para mostrar la jerarquía completa de empleados (quién reporta a quién) con su nivel de profundidad.
+
+WITH Jerarquia AS (
+	--Caso base
+	SELECT 
+		EmployeeID,
+		LastName + ' ' + FirstName AS Nombre,
+		ReportsTo,
+		0 AS nivel
+	FROM Employees
+	WHERE ReportsTo IS NULL
+
+	UNION ALL
+	--Caso recursivo
+	SELECT 
+		E.EmployeeID,
+		E.LastName + ' ' + E.FirstName AS Nombre,
+		E.ReportsTo,
+		J.nivel + 1
+	FROM Employees E
+	INNER JOIN Jerarquia J on J.EmployeeID = E.ReportsTo
+)
+
+SELECT 
+	REPLICATE(' ',nivel) + Nombre,
+	nivel 
+FROM Jerarquia;
