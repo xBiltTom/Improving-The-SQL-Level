@@ -138,3 +138,25 @@ INNER JOIN Products P on P.ProductID = OD.ProductID
 
 -- Consultar la vista
 SELECT TOP 10 * FROM vw_VentasDetalle ORDER BY IngresoNeto DESC
+
+
+-- ============= WINDOW FUNCTIONS ============
+-- Ranking de ventas por empleado
+-- Usando window functions, asigna un ranking a cada empleado según su total de ventas.
+-- Usa RANK() y DENSE_RANK().
+
+
+WITH VentasEmpleado AS (
+	SELECT 
+		E.FirstName + ' ' + E.LastName as Empleado,
+		ROUND(SUM(od.Quantity*OD.UnitPrice*(1-od.Discount)),2) as Total
+	FROM Employees E
+	INNER JOIN Orders O on E.EmployeeID = O.EmployeeID
+	INNER JOIN [Order Details] OD on OD.OrderID = O.OrderID
+	GROUP BY E.FirstName, E.LastName
+)
+SELECT
+	Empleado, Total,
+	RANK() OVER (ORDER BY Total DESC) As Ranking,
+	DENSE_RANK() OVER (ORDER BY Total DESC) AS DenseRanking 
+FROM VentasEmpleado
