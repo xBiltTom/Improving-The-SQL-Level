@@ -117,3 +117,24 @@ SELECT
 	REPLICATE(' ',nivel) + Nombre,
 	nivel 
 FROM Jerarquia;
+
+-- Crea una vista llamada vw_VentasDetalle que consolide: nombre del cliente, empleado, producto, 
+-- cantidad, precio unitario e ingreso neto (con descuento). Luego consulta la vista para obtener el
+-- top 10 de ingresos.
+
+CREATE OR ALTER VIEW vw_VentasDetalle AS 
+SELECT
+	c.CompanyName as Cliente,
+	e.FirstName + ' ' + e.LastName as Empleado,
+	p.ProductName as Producto,
+	od.Quantity as Cantidad,
+	od.UnitPrice as PrecioUnitario,
+	ROUND((od.UnitPrice*od.Quantity*(1-od.Discount)),2) as IngresoNeto
+FROM Orders O
+INNER JOIN Customers C on C.CustomerID = O.CustomerID
+INNER JOIN Employees E on E.EmployeeID = O.EmployeeID
+INNER JOIN [Order Details] OD on OD.OrderID = O.OrderID
+INNER JOIN Products P on P.ProductID = OD.ProductID
+
+-- Consultar la vista
+SELECT TOP 10 * FROM vw_VentasDetalle ORDER BY IngresoNeto DESC
