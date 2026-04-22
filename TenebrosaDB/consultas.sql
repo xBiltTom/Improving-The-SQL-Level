@@ -40,3 +40,25 @@ FROM CLIENTE C
 WHERE 
 	credito = 1 -- Clientes con crédito aprobado
 ORDER BY topeCredito DESC;
+
+-- 2. Analizando la transaccionalidad
+-- 2.1. Radiografía de las últimas facturas/boletas
+-- Esta consulta simular lo que vería el endpoint que solicita el historial de compras
+-- de la tienda, mostrando qué empleado vendió que productos y a qué cliente
+
+SELECT
+	D.Documento AS NroDocumento,
+	D.Fecha,
+	C.Nombre AS Cliente,
+	PER.Nombre AS Vendedor,
+	P.Descripcion AS ProductoVendido,
+	DD.Cantidad,
+	DD.PrecUnit as PrecioUnitario,
+	(DD.Cantidad*DD.PrecUnit) AS SubTotalItem
+FROM DOCUMENTO D
+INNER JOIN DETADOC DD on D.Documento = DD.Documento AND D.TipoDoc = DD.TipoDoc
+INNER JOIN CLIENTE C ON D.Cliente = C.Cliente
+INNER JOIN PERSONAL PER ON D.Personal = PER.Personal
+INNER JOIN PRODUCTO P ON DD.Producto = P.Producto
+ORDER BY 
+	D.Fecha DESC;
