@@ -29,3 +29,4 @@ WHERE
 	P.StockAc <= P.StockMin
 ORDER BY 
 	P.StockAc ASC;
+
