@@ -62,3 +62,24 @@ INNER JOIN PERSONAL PER ON D.Personal = PER.Personal
 INNER JOIN PRODUCTO P ON DD.Producto = P.Producto
 ORDER BY 
 	D.Fecha DESC;
+
+-- 3. Finanzas y reglas de negocio
+-- 3.1. Monitoreo del cronograma de pagos
+-- Se consulta las cuotas programadas que aún no han sido pagadas, ordenadas por
+-- su fecha de vencimiento.
+
+SELECT
+	CR.Documento, 
+	C.Nombre as Cliente,
+	CR.NroCuota,
+	CR.Importe AS Capital,
+	CR.Interes,
+	(CR.Importe+CR.Interes+CR.IgvInteres) AS TotalCuota,
+	CR.feVence AS FechaVencimiento
+FROM CRONOGRAMA CR
+INNER JOIN DOCUMENTO D ON CR.Documento = D.Documento
+INNER JOIN CLIENTE C ON D.Cliente = C.Cliente
+WHERE 
+	CR.estado = 'P' -- Asumiendo que 'P' significa Pendiente o programado
+ORDER BY
+	CR.feVence ASC;
