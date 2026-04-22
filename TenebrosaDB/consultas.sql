@@ -30,3 +30,13 @@ WHERE
 ORDER BY 
 	P.StockAc ASC;
 
+-- 1.2. Perfil de los clientes VIP
+-- Esta consulta sirve para identificar los clienes con mayor línea de crédito aprobada, 
+-- lo cual es vital para el módulo de cuentas por cobrar
+
+SELECT TOP 10
+	*
+FROM CLIENTE C
+WHERE 
+	credito = 1 -- Clientes con crédito aprobado
+ORDER BY topeCredito DESC;
